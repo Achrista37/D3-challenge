@@ -114,7 +114,7 @@ d3.csv("data.csv").then(function(healthData, err) {
   
     // Create y scale function
     var yLinearScale = d3.scaleLinear()
-      .domain([0, d3.max(healthData, d => d.num_hits)])
+      .domain([0, d3.max(healthData, d => d.poverty)])
       .range([height, 0]);
   
     // Create initial axis functions
