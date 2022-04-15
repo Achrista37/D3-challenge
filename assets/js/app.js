@@ -28,11 +28,11 @@ var chartGroup = svg.append("g")
 // Initial Params////?????????????????????????????????????????????????????????????????????/
 var chosenXAxis = "obesity";
 
-function xScale(hairData, chosenXAxis) {
+function xScale(hData, chosenXAxis) {
     // create scales
     var xLinearScale = d3.scaleLinear()
-      .domain([d3.min(data, d => d[chosenXAxis]) * 0.8,
-        d3.max(hairData, d => d[chosenXAxis]) * 1.2
+      .domain([d3.min(hData, d => d[chosenXAxis]) * 0.8,
+        d3.max(hData, d => d[chosenXAxis]) * 1.2
       ])
       .range([0, width]);
   
@@ -167,7 +167,7 @@ d3.csv("data.csv").then(function(healthData, err) {
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
       .classed("axis-text", true)
-      .text("Number of Billboard 500 Hits");
+      .text("Poverty");
   
     // updateToolTip function above csv import
     var circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
