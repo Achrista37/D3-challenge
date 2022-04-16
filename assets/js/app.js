@@ -1,6 +1,6 @@
 // The code for the chart is wrapped inside a function that
 // automatically resizes the chart
-function makeResponsive() {
+/*function makeResponsive() {
 
   // if the SVG area isn't empty when the browser loads,
   // remove it and replace it with a resized version of the chart
@@ -10,6 +10,7 @@ function makeResponsive() {
   if (!svgArea.empty()) {
     svgArea.remove();
   }
+*/
 
   // SVG wrapper dimensions are determined by the current width and
   // height of the browser window.
@@ -32,8 +33,14 @@ function makeResponsive() {
     .append("svg")
     .attr("height", svgHeight)
     .attr("width", svgWidth);
+    
+    
 
   // Append group element
+  //var formatAxis = d3.format("  0");
+
+
+  //var axisText = d3.select("#scatter").append("text").attr("class","x-label").attr("text-anchor","end").attr("x",15).attr("y",0).text("------------------------------------------------")
   var chartGroup = svg.append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
@@ -72,38 +79,81 @@ function makeResponsive() {
     chartGroup.append("g")
       .call(yAxis);
 
-    // line generator
- //   var line = d3.line()
- //     .x(d => xLinearScale(d.poverty))
- //     .y(d => yLinearScale(d.healthcare));
-
-    // append line
- //   chartGroup.append("path")
- //     .data([hData])
- //     .attr("d", line)
- //     .attr("fill", "none")
- //     .attr("stroke", "red");
 
     // append circles
     var circlesGroup = chartGroup.selectAll("circle")
       .data(hData)
       .enter()
+      .append("g")
+      .attr("id","circle-wrapper")
       .append("circle")
       .attr("cx", d => xLinearScale(d.poverty))
       .attr("cy", d => yLinearScale(d.healthcare))
       .attr("r", "10")
       .attr("fill", "gold")
       .attr("stroke-width", "1")
-      .attr("stroke", "black");
+      .attr("stroke", "black")
+      .attr('opacity', 0.2)
+     // .html(function (d) {return `${d.abbr}`})
+      ;
+      chartGroup
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - 50)
+      .attr("x", 0 - 250)
+      .attr("dy", "1em")
+      .attr("class", "axisText")
+      .text("Access to Healthcare (%)");
+  
+    chartGroup
+      .append("text")
+      .attr("transform", `translate(${width / 5.5}, ${height + margin.top + 55})`)
+      .classed("axis-text", true)
+      .text("In Poverty (%)");
+
+
+      chartGroup
+      .selectAll("g#circle-wrapper")
+      .data(hData, function (d) {
+        console.log(d);
+        d3.select(this).append("text")
+       // .select("text")
+        .text(d => d.abbr)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "12px")
+        .attr("fill", "black")
+        .attr("x", (d) => xLinearScale(d.poverty))
+        .attr("y", (d) => yLinearScale(d.healthcare))
+     //   .attr("dy", -395)
+      })
+     // .enter()
+     /* .each(function (circle) {
+        console.log(this);
+        d3.select(this).append("text")
+        .select("text")
+        .text((d) => d.abbr)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "12px")
+        .attr("fill", "black")
+        })
+      */
+    /*
+      .attr("x", (d) => xLinearScale(d.poverty))
+      .attr("y", (d) => yLinearScale(d.healthcare))
+      .attr("dy", -395)
+      */
+      ;
 
       console.log(hData);
-
+      
+  
+ 
     // Step 1: Append tooltip div
-   
+   /*
     var toolTip = d3
-    .tip()
+    .tooltip()
     .attr("class", "tooltip")
-    .offset([80, -60])
+    .offset([0, 0])
     .style("color", "black")
     .style("background", "white")
     .style("border", "solid")
@@ -113,10 +163,20 @@ function makeResponsive() {
     .html(function (d) {
       return `${d.abbr}`;
     });
+*/
+    circlesGroup.call(toolTip);
+/*
+    svg.selectAll("text")
+      .data(hData)
+      .enter()
+      .append("text")
+      .attr('x', (item) => {return item[0]})
+  
+*/
 
   // Step 7: Create tooltip in the chart
   // ==============================
-  circlesGroup.call(toolTip);
+  //circlesGroup.call(toolTip);
   /*
     var toolTip = d3.select("body")
       .append("div")
@@ -139,10 +199,10 @@ function makeResponsive() {
   }).catch(function(error) {
     console.log(error);
   });
-}
+
 
 // When the browser loads, makeResponsive() is called.
-makeResponsive();
+//makeResponsive();
 
 // When the browser window is resized, makeResponsive() is called.
 d3.select(window).on("resize", makeResponsive);
